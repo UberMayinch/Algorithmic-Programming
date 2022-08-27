@@ -1,0 +1,6 @@
+lst= input().split(" ")
+M= int(lst[0])
+N= int(lst[1])
+
+Area= M * N
+print(Area // 2)
