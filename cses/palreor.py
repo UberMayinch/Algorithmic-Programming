@@ -13,24 +13,33 @@ for alp in str:
 values_lst=list(letter_map.values())
 
 odd = 0
+flag = 0
 for val in values_lst:
-    if val % 2 == 1 and len(values_lst) % 2 == 0:
+    if val % 2 == 1 and len(str) % 2 == 0:
+        flag =1
         print("NO SOLUTION")
-        odd += 1
         break
+    if val % 2 == 1 and odd == 0:
+        odd +=1
     elif val % 2 == 1 and odd == 1:
+        flag =1
         print("NO SOLUTION")    
         break 
-    else:
-        if val % 2 == 0:
-            val = val / 2
 ans = ""
-
-for i in range(1, 26):
+rem = -1
+for i in range(0, 26):
     
     if values_lst[i] % 2 != 1:
-        ans += letters[i]*values_lst[i] 
-    
-ans += ans[::-1]
-print(ans)
+        reps = values_lst[i]//2
+        ans += letters[i]*(reps)
+    else:
+        rem = i
+
+ans2 = ans[::-1]
+if rem != -1:
+ ans += letters[rem]*values_lst[rem]
+ans +=ans2
+
+if flag != 1:
+    print(ans)
 
