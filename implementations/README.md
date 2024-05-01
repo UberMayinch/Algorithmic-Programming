@@ -1,2 +1,2 @@
 # implementations
-implementations of algorithms from the Advanced Algorithms Design course
+implementations of algorithms from the Algorithm Analysis and Design course
