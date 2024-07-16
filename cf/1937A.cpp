@@ -8,8 +8,8 @@ int main(){
     int t;
     cin >> t;
     int idx=0;
-    while(pow(2, ++idx)<t);
+    while(pow(2, ++idx)<=t);
     idx=max(0,idx-1);
-    cout << pow(2,idx) << "\n";
+    cout << (long long)(pow(2,idx)) << "\n";
   }
 }
