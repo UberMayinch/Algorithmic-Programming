@@ -9,50 +9,64 @@ typedef long long int ll;
 
 vector<array<int, 2>> dxy = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
-int calc(vector<vector<char>> board, int count, int row){
-  for(int i=0;i<8;i++){
-    if(board[row][i] == '*'){
-      board[row][i]='&';
-      //change rows
-      //change columns
-      for(int j=row;j<8;j++){
-        board[j][i]='&';
-      }
-      //change diagonals
-      int e = i+1;
-      for(int j=row+1;j<8;j++){
-        e+=1;
-        board[row][e]='&';
-      }
-      if(row == 8){
-        for(auto it:board){
-          for(auto ia: it){
-            cout << ia;
-          }
-        cout << endl;
-        }
+void calc(vector<vector<int>>&board, int& count, int row){
+  if(row == board.size()-1){
+    for(int i=0;i<board[row].size();i++){
+      if(board[row][i] == 0){
         count++;
-        return count;
       }
-      count += calc(board, count, row+1);
     }
-      board[row][i] = '*';
-      //change rows
-      //change columns
-      for(int j=row;j<8;j++){
-        board[j][i]='*';
-      }
-      //change diagonals
-      for(int j=row+1;j<8;j++){
-        i+=1;
-        board[row][i]='*';
+    return;
+  }
+  else{
+    for(int i=0;i<board[row].size();i++){
+      if(board[row][i] == 0){
+      
+        for(int j=row;j<board.size();j++){
+          if(board[j][i] != -1){
+            board[j][i]+=1;
+          }
+          for(int j=1;j<(board.size()-row);j++){
+            if(j + row < board.size() && i + j < board[row].size()){
+              if(board[j+row][i+j] != -1){
+                board[j+row][i+j] += 1;
+              }
+            }
+            if(j + row < board.size() && i - j >= 0){
+              if(board[j+row][i-j] != -1){
+                board[j+row][i-j] += 1;
+              }
+            }
+          }
+        }
+        calc(board, count, row+1);
+
+        for(int j=row;j<board.size();j++){
+          if(board[j][i] != -1){
+            board[j][i]-=1;
+          }
+          for(int j=1;j<(board.size()-row);j++){
+            if(j + row < board.size() && i + j < board[row].size()){
+              if(board[j+row][i+j] != -1){
+                board[j+row][i+j] -= 1;
+              }
+            }
+            if(j + row < board.size() && i - j >= 0){
+              if(board[j+row][i-j] != -1){
+                board[j+row][i-j] -= 1;
+              }
+            }
+          }
+        }
       }
   }
-  return count;
+  return;
+}
 }
 
 int main(){
   vector<vector<char>> board(8, vector<char>(8));
+  vector<vector<int>> board_state(8, vector<int>(8));
   for(int i=0;i<8;i++){
     string s;
     cin >> s;
@@ -60,8 +74,17 @@ int main(){
       board[i][j]=s[j];
     }
   }
+  for(int i=0;i<8;i++){
+    for(int j=0;j<8;j++){
+      board_state[i][j]=(board[i][j] == '*'?-1:0);
+      // cout << board_state[i][j];
+    }
+    // cout << endl;
+  }
   int count=0;
-  cout << calc(board, count, 0) << endl;
+  calc(board_state, count, 0);
+  cout << count << endl;
+
 }
 
 

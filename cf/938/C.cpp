@@ -6,9 +6,6 @@ typedef vector<int> vi;
 
 #define pushback PB
 
-void solve(){
-
-}
 
 int main(){
   int t;
@@ -16,54 +13,45 @@ int main(){
   while(t--){
     ll n, k;
     cin >> n >> k;
-    int i =0;
-    int j=n-1;
-    int flag = 0;
-    vector <ll> v(n);
+    vi v(n);
     for(int i=0;i<n;i++){
       cin >> v[i];
     }
-    int count = 0;
-    while(j >= i){
-      if(k < 0){
-        break;
+    int i =0;
+    int j=n-1;
+    ll sum=0;
+    vi check;
+    bool start=true;
+    while(i < j){
+      if(start && v[i] <= v[j]){
+        sum += 2*v[i]-1;
+        v[j] -= v[i]-1;
+        start = false;
+        i++;  
       }
-      if(flag == 0){
-
-      if(v[j] > v[i]){
-        k = k - 2*(v[i]) + 1;
-        v[j] = v[j]-v[i]+1;
-        count++;
+      else if(start && v[j] < v[i]){
+        sum += 2*v[j];
+        v[i] -= v[j];
+        j--;
+      }
+      else if(!start && v[i] < v[j]){
+        sum += 2*v[i];
+        v[j] -= v[i];
         i++;
-        flag = 1;
       }
-      else if (v[j] <= v[i]) {
-       k = k - 2*(v[j]);
-       v[i] = v[i] - v[j];
-       count++;
-       flag = 1;
-       j++;
+      else if(!start && v[j] <= v[i]){
+        sum += 2*v[j]-1;
+        v[i] -= v[j];
+        j--;
+        start=true;
       }
-
-      }
-      else if(flag == 1){
-        if(v[j] > v[i]){
-          i++;
-
-       k = k - 2*(v[i]);
-       v[j] = v[j] - v[i];
-       count++;
-       flag = 0;
-        }
-        else if(v[j] <= v[i]){
-j++;
-        k = k - 2*(v[j]) + 1;
-        v[i] = v[i]-v[j]+1;
-        count++;
-        flag = 0;
-        }
-      }
+      check.push_back(sum);
     }
+    check.push_back(sum + v[i]);
+    for(auto it: check){
+      cout << it << " ";
+    }
+    int count = upper_bound(check.begin(), check.end(), k) - check.begin();
     cout << count << endl;
   }
 }

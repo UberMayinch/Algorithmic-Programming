@@ -1,55 +1,86 @@
-
 #include <bits/stdc++.h>
 using namespace std;
+#define INF (int)1e9
+#define mp make_pair
+#define pb push_back
 
-typedef pair<int, int> iPair;
+void DjikstraNaive(int s, vector<vector<pair<int,int>>> G, vector<int>& p, vector<int>& d){
+    int n=G.size()-1;
+    vector<bool> m(n, false);
+    vector<int> dist(n, INF);
 
-vector<int> djikstra(int source, vector<vector<iPair>>& Graph, int n) {
-    vector<int> distArr(n, INT_MAX);
-    priority_queue<iPair, vector<iPair>, greater<iPair>> Heap;
+    d[s]=0;
 
-    distArr[source - 1] = 0;
-    Heap.push(make_pair(0, source));
+    for(int i=0;i<n;i++){
+        int v = -1;
+        
+        // find the least distant unmarked vertex
+        for(int j=0;j<n;j++){
+            if(v == -1 || !m[j] && d[j] < d[v]){
+                v=j;
+            }
+        }
 
-    while (!Heap.empty()) {
-        int u = Heap.top().second;
-        Heap.pop();
+        if(d[v] == INF){
+            break;
+        }
 
-        for (auto it = Graph[u - 1].begin(); it != Graph[u - 1].end(); it++) {
-            int v = it->first;
-            int weight = it->second;
+        m[v]=true;
+        for(auto it: G[v+1]){
 
-            if (distArr[u - 1] != INT_MAX && distArr[u - 1] + weight < distArr[v - 1]) {
-                distArr[v - 1] = distArr[u - 1] + weight;
-                Heap.push(make_pair(distArr[v - 1], v));
+            //index first, distance second in pair
+            if(d[it.second] > d[v] + it.first){
+                d[it.second]= d[v] + it.first;
+                
+                //v is 0 indexed so we can restore path directly
+                p[it.second]=v;
             }
         }
     }
-
-    return distArr;
+    return;
 }
 
-int main() {
+vector<int> restore_path(vector<int>& p, int s, int t){
+
+    vector<int> path;
+    
+    for(int i=t;i!=s;i=p[i]){
+        path.pb(i);
+    }
+    path.pb(s);
+    reverse(path.begin(), path.end());
+    return path;
+}
+
+int DjikstraSet(){
+
+}
+
+int DjikstraHeap(){
+
+}
+
+int main(){
     int n, m;
     cin >> n >> m;
-    cout << "Nodes: " << n << " Edges: " << m << endl;
-    vector<vector<iPair>> Graph(n);
-
-    for (int i = 0; i < m; i++) {
-        int x1, x2, w;
-        cin >> x1 >> x2 >> w;
-        Graph[x1 - 1].push_back(make_pair(x2, w));
+    vector<vector<pair<int,int>>>G(n+1, vector<pair<int,int>>());
+    for(int i=0;i<m;i++){
+        int x, y, z;
+        cin >> x >> y >> z;
+        G[x].pb(mp(y, z));
+        G[y].pb(mp(x, z));
     }
 
-    int src;
-    cout << "Source for Djikstra:";
-    cin >> src;
+    vector<int>p(n, -1);
+    vector<int>d(n, 0);
 
-    vector<int> DistArr = djikstra(src, Graph, n);
+    DjikstraNaive(src, G, p, d);
 
-    int dest;
-    cout << "Destination:";
-    cin >> dest;
+    vector<int> ans = restore_path(p, 0, 2);
+    for(auto it: ans){
+        cout << it << " ";
+    }
+    cout << endl;
 
-    cout << "Shortest distance from " << src << " to " << dest << " is " << DistArr[dest - 1] << endl;
+    return 0;
 }

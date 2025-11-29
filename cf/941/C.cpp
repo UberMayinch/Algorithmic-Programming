@@ -7,7 +7,6 @@ int main(){
   while(t--){
     int n;
     cin >> n;
-    int turn=1;
     int counter=-1;
     int sum=0;
     int flag=0;
@@ -16,30 +15,32 @@ int main(){
       cin >> v[i];
     }   
     sort(v.begin(), v.end());
-    int idx=0;
-    while((idx < n) && (v[idx]-sum >0)){
-      if((v[idx] - sum > 1)&&(flag != 1)){
-        counter = turn;
-        flag=1;
-        // cout << counter << " " << v[0]-sum << endl;
-        }
-      turn=1-turn;
-      sum +=v[idx]-sum;
-      idx++;
-      // cout << sum << " " << turn;
+    bool turn = true;
+    int win=2;
+    if(v[0] > 1){
+      win = 1;
     }
-    if(counter == 0){
-      cout << "Bob";
+
+    for(int i=1;i<n;i++){
+      if(v[i-1] - v[i] == 1){
+        turn = !turn;
+      }
+      else if(v[i-1] - v[i] > 1){
+
+        win = turn;
+      }
     }
-    else if(counter == 1){
-      cout << "Alice";
+
+    // cout << count << endl;
+    if(win == 1){
+      cout << "Alice" << endl;
     }
-    else if(turn == 1){
-      cout << "Bob";
+    else if(win == 0){
+      cout << "Bob" << endl;
     }
-    else if(turn == 0){
-      cout << "Alice";
+    else{
+      cout << (turn ? "Alice" : "Bob") << endl;
+
     }
-  cout << endl;
   }
 }

@@ -13,7 +13,8 @@ void solve(){
 int main(){
   int t;
   cin >> t;
-  while(t--){
+  while (t--)
+  {
     int n;
     cin >> n;
     vi v(n);
@@ -29,8 +30,8 @@ int main(){
         cout << "NO" << endl;
         flag=0;
         break;
-      }
-      else{
+    }
+    else{
         check = v[i] % 10;
       }
       }
@@ -44,9 +45,8 @@ int main(){
       }
     }
     }
-  
+
     if(flag != 0) cout << "YES" << endl;
   }
-
 }
 
